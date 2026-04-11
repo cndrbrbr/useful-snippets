@@ -1,2 +1,3 @@
-# c-c++-c#-useful-snippets
+# useful-snippets
 Lookup howto do this and that.
+
