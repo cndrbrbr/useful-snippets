@@ -45,16 +45,38 @@ for EXT in $ENDUNGEN; do
 
     TMPFILE=$(mktemp)
 
-    exiftool -r \
+#######################################################
+#   Selected Attributes 
+#######################################################
+   exiftool -r \
       -ext "$EXT" \
       -csv -G1 -a -u \
       -FileName \
       -Directory \
       -FileTypeExtension \
-      -All:All \
+      -ExposureTime \
+      -FNumber \
+      -ISO \
+      -ExposureCompensation \
+      -MeasuredEV \
       --SourceFile \
       -d "%Y-%m-%d %H:%M:%S" \
       "$ORDNER" > "$TMPFILE"
+
+#######################################################
+#   All Attributes 
+#######################################################
+#    exiftool -r \
+#      -ext "$EXT" \
+#      -csv -G1 -a -u \
+#      -FileName \
+#      -Directory \
+#      -FileTypeExtension \
+#      -All:All \
+#      --SourceFile \
+#      -d "%Y-%m-%d %H:%M:%S" \
+#      "$ORDNER" > "$TMPFILE"
+#######################################################
 
     python3 - "$TMPFILE" "$AUSGABEORDNER/exif_${EXT}.csv" <<'PY'
 import csv
@@ -63,11 +85,11 @@ import sys
 src = sys.argv[1]
 dst = sys.argv[2]
 
-with open(src, "r", encoding="utf-8", newline="") as fin, \
+with open(src, "r", encoding="utf-8", errors="replace", newline="") as fin, \
      open(dst, "w", encoding="utf-8-sig", newline="") as fout:
-    reader = csv.reader(fin)
-    writer = csv.writer(fout, delimiter=';')
-    for row in reader:
+     reader = csv.reader(fin)
+     writer = csv.writer(fout, delimiter=';')
+     for row in reader:
         writer.writerow(row)
 PY
 
