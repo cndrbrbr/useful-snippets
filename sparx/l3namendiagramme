@@ -1,0 +1,11 @@
+function OnDiagram(theDiagram) {
+    var result = "";
+    var pattern = /^(L3|L4) : .+ : (Node Interaction|Logical Activities)$/;
+    if ((theDiagram.MetaType == "L3 - Node Interaction" ||
+         theDiagram.MetaType == "L4 - Logical Activities") &&
+        !pattern.test(theDiagram.Name)) {
+        result += "Namenskonvention verletzt: '" + theDiagram.Name +
+            "' entspricht nicht dem Schema 'L3/L4 : Projektkürzel : Viewpoint'.\n";
+    }
+    return result;
+}
